@@ -15,7 +15,7 @@ namespace zaehlerNS
             InitializeComponent();
             zaehlerList = new List<Zaehler>();
             chart1.ChartAreas[0].CursorX.Interval = 0.00001;
-            chart1.ChartAreas[0].CursorY.Interval = 1;
+            chart1.ChartAreas[0].CursorY.Interval = 0.001;
             chart1.ChartAreas[0].CursorX.IsUserSelectionEnabled = true;
             chart1.ChartAreas[0].CursorY.IsUserSelectionEnabled = true;
             chart1.Legends[0].Alignment = System.Drawing.StringAlignment.Center;
@@ -24,6 +24,7 @@ namespace zaehlerNS
             chart1.Legends[0].BackColor = System.Drawing.Color.Transparent;
 
             cBIntervall.DataSource = Enum.GetNames(typeof(ZeitIntervall));
+            cBCalcMode.DataSource = Enum.GetNames(typeof(CalcMode));
         }
 
         public void AddZaehler(Zaehler z)
@@ -87,20 +88,6 @@ namespace zaehlerNS
         }
 
 
-
-        private void cBDiff_CheckedChanged(object sender, EventArgs e)
-        {
-            CheckBox cb = (CheckBox)sender;
-
-            foreach (var zaehler in zaehlerList)
-            {
-                zaehler.DiffMode = cb.Checked;
-                zaehler.readData();
-            }
-            aktualisieren();
-        }
-
-
         private void button1_Click(object sender, EventArgs e)
         {
             new ChartPropertiesForm(chart1).Show();
@@ -137,6 +124,30 @@ namespace zaehlerNS
                     cBIntervall.SelectedItem = "Minute";
                 }
                 
+                zaehler.readData();
+            }
+            aktualisieren();
+        }
+
+        private void cBCalcMode_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            CalcMode calcMode = CalcMode.value;
+            bool dataOnIntervalBoundarysAllowed = true;
+
+            calcMode = (CalcMode)Enum.Parse(typeof(CalcMode), cBCalcMode.SelectedValue.ToString());
+            if ((calcMode == CalcMode.difference ) | (calcMode == CalcMode.average))    
+            {   // keine berechnung auf Intervallgrenzen
+                dataOnIntervalBoundarysAllowed = false;
+            }
+
+            foreach (var zaehler in zaehlerList)
+            {
+                zaehler.CalcMode = calcMode;
+                zaehler.Intervall = ZeitIntervall.all;
+                cBIntervall.SelectedItem = "all";
+                zaehler.dataOnIntervalBoundarys &= dataOnIntervalBoundarysAllowed;
+                cBIntervallgrenzen.Checked = zaehler.dataOnIntervalBoundarys;
+
                 zaehler.readData();
             }
             aktualisieren();

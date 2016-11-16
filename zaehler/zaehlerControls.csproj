@@ -49,6 +49,7 @@
     <Compile Include="ChartPropertiesForm.Designer.cs">
       <DependentUpon>ChartPropertiesForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="CalcMode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Zaehler.cs" />
     <Compile Include="ZaehlerControl.cs">

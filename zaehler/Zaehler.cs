@@ -91,7 +91,8 @@ namespace zaehlerNS
             }
         }
 
-        public bool DiffMode { get; set; }
+        public CalcMode CalcMode { get; set; }
+
         public bool dataOnIntervalBoundarys { get; set; }
 
 
@@ -138,7 +139,7 @@ namespace zaehlerNS
                                     startTime = endTime;
                                     lastWert = istWert;
                                 }
-                                for (DateTime time = startTime;time<=endTime;time+= Interval.toTimespan(intervall))
+                                for (DateTime time = startTime; time <= endTime; time += Interval.toTimespan(intervall))
                                 {
                                     values.Add(time, lastWert);
                                 }
@@ -149,11 +150,26 @@ namespace zaehlerNS
                             {
                                 if (!sameIntervall(istTime, lastTime, intervall))
                                 {
-                                    values.Add(istTime, istWert);
+                                    if (CalcMode == CalcMode.value)
+                                    {
+                                        values.Add(istTime, istWert);
+                                    }
+                                    else if (CalcMode == CalcMode.difference)
+                                    {
+                                        if (lastTime > new DateTime(2010, 1, 1))  values.Add(istTime,istWert - lastWert);
+                                    }
+                                    else if (CalcMode == CalcMode.average)
+                                    {
+                                        if (lastTime > new DateTime(2010, 1, 1))
+                                        {
+                                            double dauer = (istTime - lastTime).TotalSeconds;
+                                            values.Add(lastTime, (istWert - lastWert) / dauer);
+                                        }
+                                    }
                                     lastTime = istTime;
                                 }
+                                lastWert = istWert;
                             }
-
                         }
                         catch (Exception ex)
                         {
