@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZaehlerControlTest", "ZaehlerControlTest\ZaehlerControlTest.csproj", "{274B0B47-3A08-4F5C-A86E-2B8AC6C136BD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zaehlerControls", "zaehler\zaehlerControls.csproj", "{B2102018-CDC1-4A28-B59E-DE0B0B294C79}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{274B0B47-3A08-4F5C-A86E-2B8AC6C136BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{274B0B47-3A08-4F5C-A86E-2B8AC6C136BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{274B0B47-3A08-4F5C-A86E-2B8AC6C136BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{274B0B47-3A08-4F5C-A86E-2B8AC6C136BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B2102018-CDC1-4A28-B59E-DE0B0B294C79}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2102018-CDC1-4A28-B59E-DE0B0B294C79}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2102018-CDC1-4A28-B59E-DE0B0B294C79}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2102018-CDC1-4A28-B59E-DE0B0B294C79}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
