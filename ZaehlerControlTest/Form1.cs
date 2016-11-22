@@ -18,9 +18,10 @@ namespace zaehlerNS
             InitializeComponent();
 
 //            Zaehler z = new Zaehler("Wasser","select Top 100 Datum,Volumen from H2OZaehler order by datum desc");
-            Zaehler z = new Zaehler("Wasser", "Datum","Volumen","H2OZaehler",1000);
+            Zaehler z = new Zaehler("Wasser", "Datum","Volumen","H2OZaehler",0);
             z.Name = "Wasserzähler";
             zaehlerControl1.AddZaehler(z);
+            
 
 //            Zaehler z2 = new Zaehler("Strom", "select Top 100 Datum,Bezogen from Zaehlerstaende order by datum desc");
             Zaehler z2 = new Zaehler("Bezugszähler", "Datum","Bezogen","Zaehlerstaende",100);

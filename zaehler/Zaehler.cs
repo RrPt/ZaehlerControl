@@ -26,6 +26,7 @@ namespace zaehlerNS
         private int maxRows;
         private ZeitIntervall intervall = ZeitIntervall.all;
         private int anzTage = 1;
+        ZaehlerControl myControl = null;
 
         #region Konstruktoren
 
@@ -42,6 +43,11 @@ namespace zaehlerNS
             else this.maxRows = maxRows;
             values = new SortedList<DateTime, double>();
             readData();
+        }
+
+        internal void MyControl(ZaehlerControl zaehlerControl)
+        {
+            myControl = zaehlerControl;
         }
         #endregion
 
@@ -115,6 +121,7 @@ namespace zaehlerNS
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 DateTime anfangsDatum = DateTime.Now.AddDays(-anzTage);
+                TimeSpan zeitspanne = new TimeSpan(anzTage, 0, 0, 0);
                 String sqlStatement = sqlStatement = String.Format("select {1},{2} from {3} where {1} > '{4}' order by datum asc", maxRows, datumSpaltenName, wertSpaltenName, tabellenName,anfangsDatum);
                 SqlCommand cmd = new SqlCommand(sqlStatement);
                 cmd.CommandType = CommandType.Text;
@@ -131,7 +138,7 @@ namespace zaehlerNS
                             istWert = (double)reader.GetDecimal(1);
 
                             if (dataOnIntervalBoundarys)
-                            {
+                            {   // Werte nur an Intervallgrenzen
                                 DateTime startTime = Interval.abrunden(lastTime, intervall) + Interval.toTimespan(intervall);
                                 DateTime endTime = Interval.abrunden(istTime, intervall);
                                 if (startTime < new DateTime(2010, 1, 1))
@@ -141,35 +148,68 @@ namespace zaehlerNS
                                 }
                                 for (DateTime time = startTime; time <= endTime; time += Interval.toTimespan(intervall))
                                 {
-                                    values.Add(time, lastWert);
+                                    //values.Add(time, lastWert);
+                                    // neu
+
+                                    // Werte ausdünnen
+                                    if (!sameIntervall(time, lastTime, intervall))
+                                    {   // erster Wert in neuem Intervall
+                                        if (CalcMode == CalcMode.value)
+                                        {   // Wert anzeigen
+                                            values.Add(time, istWert);
+                                        }
+                                        else if (CalcMode == CalcMode.difference)
+                                        {   // Differenz zu letztem angezeigten Wert anzeigen
+                                            if (lastTime > new DateTime(2010, 1, 1)) values.Add(time, istWert - lastWert);
+                                        }
+                                        else if (CalcMode == CalcMode.average)
+                                        {   // Mittelwert über letztes angezeigte Intervall anzeigen
+                                            if (lastTime > new DateTime(2010, 1, 1))
+                                            {   // nivht der erste Wert (da sonst kein Zeitintervall bekannt)
+                                                double dauer = (time - lastTime).TotalSeconds;
+                                                values.Add(lastTime, (istWert - lastWert) / dauer);
+                                            }
+                                        }
+                                        lastWert = istWert;
+                                        lastTime = time;
+                                    }
+                                    // neu ende
                                 }
                                 lastTime = endTime;
                                 lastWert = istWert;
                             }
                             else
-                            {
+                            {   // Werte ausdünnen
                                 if (!sameIntervall(istTime, lastTime, intervall))
-                                {
+                                {   // erster Wert in neuem Intervall
                                     if (CalcMode == CalcMode.value)
-                                    {
+                                    {   // Wert anzeigen
                                         values.Add(istTime, istWert);
                                     }
                                     else if (CalcMode == CalcMode.difference)
-                                    {
+                                    {   // Differenz zu letztem angezeigten Wert anzeigen
                                         if (lastTime > new DateTime(2010, 1, 1))  values.Add(istTime,istWert - lastWert);
                                     }
                                     else if (CalcMode == CalcMode.average)
-                                    {
+                                    {   // Mittelwert über letztes angezeigte Intervall anzeigen
                                         if (lastTime > new DateTime(2010, 1, 1))
-                                        {
+                                        {   // nivht der erste Wert (da sonst kein Zeitintervall bekannt)
                                             double dauer = (istTime - lastTime).TotalSeconds;
                                             values.Add(lastTime, (istWert - lastWert) / dauer);
                                         }
                                     }
+                                    lastWert = istWert;
                                     lastTime = istTime;
                                 }
-                                lastWert = istWert;
                             }
+                            // Fortschritt anzeigen
+                            TimeSpan bearbeiteteZeit = lastTime - anfangsDatum;
+                            double fortschritt = bearbeiteteZeit.TotalHours / zeitspanne.TotalHours;
+                            if (myControl!= null)
+                            {
+                                myControl.progressBar1.Value = (int)(fortschritt * 100d);
+                            }
+                            Console.WriteLine(fortschritt);
                         }
                         catch (Exception ex)
                         {

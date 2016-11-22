@@ -25,11 +25,13 @@ namespace zaehlerNS
 
             cBIntervall.DataSource = Enum.GetNames(typeof(ZeitIntervall));
             cBCalcMode.DataSource = Enum.GetNames(typeof(CalcMode));
+
         }
 
         public void AddZaehler(Zaehler z)
         {
             zaehlerList.Add(z);
+            z.MyControl(this);
             Series serie = chart1.Series.Add(z.Name);
             serie.Points.DataBindXY(z.Values.Keys, z.Values.Values);
             serie.ChartType = SeriesChartType.Line;
@@ -42,7 +44,7 @@ namespace zaehlerNS
                 "Mittelwert: " + "#AVG{N2}" + "\n" +
                 "Erster:     " + "#FIRST{N2}" + "\n" +
                 "Letzter:    " + "#LAST{N2}";
-
+            cBMarker_CheckedChanged(cBMarker, null);
         }
 
 
@@ -99,7 +101,8 @@ namespace zaehlerNS
             ZeitIntervall intervall = ZeitIntervall.none;
             intervall = (ZeitIntervall)Enum.Parse(typeof(ZeitIntervall),cBIntervall.SelectedValue.ToString());
             if ((intervall == ZeitIntervall.all) | (intervall == ZeitIntervall.Sekunde) & (cBIntervallgrenzen.Checked)) return;    // bei intervallgrenzen keine schnellen Intervalle erlaubt
-            
+            //if ((intervall == ZeitIntervall.all) & (cBIntervallgrenzen.Checked)) return;    // bei intervallgrenzen keine schnellen Intervalle erlaubt
+
             if (intervall != ZeitIntervall.none)
             {
                 foreach (var zaehler in zaehlerList)
