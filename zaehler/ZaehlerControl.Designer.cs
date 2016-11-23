@@ -59,6 +59,8 @@
             this.chart1.Size = new System.Drawing.Size(808, 403);
             this.chart1.TabIndex = 3;
             this.chart1.Text = "chart1";
+            this.chart1.PostPaint += new System.EventHandler<System.Windows.Forms.DataVisualization.Charting.ChartPaintEventArgs>(this.chart1_PostPaint);
+            this.chart1.PrePaint += new System.EventHandler<System.Windows.Forms.DataVisualization.Charting.ChartPaintEventArgs>(this.chart1_PrePaint);
             // 
             // cBIntervall
             // 
@@ -152,9 +154,11 @@
             // 
             this.progressBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.progressBar1.Location = new System.Drawing.Point(548, 14);
+            this.progressBar1.ForeColor = System.Drawing.SystemColors.GradientActiveCaption;
+            this.progressBar1.Location = new System.Drawing.Point(-2, 3);
             this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(184, 23);
+            this.progressBar1.Size = new System.Drawing.Size(825, 40);
+            this.progressBar1.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.progressBar1.TabIndex = 16;
             // 
             // ZaehlerControl
@@ -162,7 +166,6 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.cBCalcMode);
             this.Controls.Add(this.cBIntervallgrenzen);
             this.Controls.Add(this.button1);
@@ -172,6 +175,7 @@
             this.Controls.Add(this.cBAnzTage);
             this.Controls.Add(this.cBIntervall);
             this.Controls.Add(this.chart1);
+            this.Controls.Add(this.progressBar1);
             this.Name = "ZaehlerControl";
             this.Size = new System.Drawing.Size(821, 469);
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();

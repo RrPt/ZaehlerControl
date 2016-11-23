@@ -25,6 +25,7 @@ namespace zaehlerNS
 
             cBIntervall.DataSource = Enum.GetNames(typeof(ZeitIntervall));
             cBCalcMode.DataSource = Enum.GetNames(typeof(CalcMode));
+            progressBar1.Visible = false;
 
         }
 
@@ -57,6 +58,7 @@ namespace zaehlerNS
                 Series serie = chart1.Series[zaehler.Name];
                 serie.Points.DataBindXY(zaehler.Values.Keys, zaehler.Values.Values);
             }
+            chart1.ChartAreas[0].RecalculateAxesScale();
         }
 
 
@@ -64,7 +66,8 @@ namespace zaehlerNS
         private void cBAnzahlTage_TextChanged(object sender, EventArgs e)
         {
             ComboBox tb = (ComboBox)sender;
-            double wert = 7;
+            tb.Text = tb.Text.Replace('.', ',');
+            double wert = 1;
             if (double.TryParse(tb.Text, out wert))
             {
                 foreach (var zaehler in zaehlerList)
@@ -156,6 +159,21 @@ namespace zaehlerNS
                 zaehler.calculateData();
             }
             aktualisieren();
+        }
+
+        int anzStartPaint = 0;
+        private void chart1_PrePaint(object sender, ChartPaintEventArgs e)
+        {
+            Cursor = Cursors.WaitCursor;
+            anzStartPaint++;
+            Console.WriteLine("PrePaint "+ anzStartPaint);
+        }
+
+        private void chart1_PostPaint(object sender, ChartPaintEventArgs e)
+        {
+            anzStartPaint--;
+            Console.WriteLine("PostPaint "+ anzStartPaint);
+            if (anzStartPaint==0) Cursor = Cursors.Default;
         }
     }
 }
