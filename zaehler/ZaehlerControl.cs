@@ -45,6 +45,7 @@ namespace zaehlerNS
                 "Erster:     " + "#FIRST{N2}" + "\n" +
                 "Letzter:    " + "#LAST{N2}";
             cBMarker_CheckedChanged(cBMarker, null);
+            aktualisieren();
         }
 
 
@@ -63,14 +64,15 @@ namespace zaehlerNS
         private void cBAnzahlTage_TextChanged(object sender, EventArgs e)
         {
             ComboBox tb = (ComboBox)sender;
-            int wert = 7;
-            if (int.TryParse(tb.Text, out wert))
+            double wert = 7;
+            if (double.TryParse(tb.Text, out wert))
             {
                 foreach (var zaehler in zaehlerList)
                 {
                     zaehler.AnzTage = wert;
                     zaehler.readData();
                 }
+                
                 aktualisieren();
             }
         }
@@ -108,7 +110,7 @@ namespace zaehlerNS
                 foreach (var zaehler in zaehlerList)
                 {
                     zaehler.Intervall = intervall;
-                    zaehler.readData();
+                    zaehler.calculateData();
                 }
                 aktualisieren();
             }
@@ -127,7 +129,7 @@ namespace zaehlerNS
                     cBIntervall.SelectedItem = "Minute";
                 }
                 
-                zaehler.readData();
+                zaehler.calculateData();
             }
             aktualisieren();
         }
@@ -151,7 +153,7 @@ namespace zaehlerNS
                 zaehler.dataOnIntervalBoundarys &= dataOnIntervalBoundarysAllowed;
                 cBIntervallgrenzen.Checked = zaehler.dataOnIntervalBoundarys;
 
-                zaehler.readData();
+                zaehler.calculateData();
             }
             aktualisieren();
         }
