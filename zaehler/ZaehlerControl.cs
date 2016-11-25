@@ -9,6 +9,71 @@ namespace zaehlerNS
     {
         private List<Zaehler> zaehlerList = new List<Zaehler>();
 
+        private double displayAnzTage = 3;
+
+        public double DisplayAnzTage
+        {
+            get { return displayAnzTage; }
+            set
+            {
+                displayAnzTage = value;
+
+                // und die Daten neu einlesen
+                foreach (var zaehler in zaehlerList)
+                {
+                    zaehler.AnzTage = displayAnzTage;
+                    //zaehler.readDataFromSql();
+                }
+                aktualisieren();
+            }
+        }
+
+        private ZeitIntervall displayIntervall;
+        public ZeitIntervall DisplayIntervall
+        {
+            get { return displayIntervall; }
+            set
+            {
+                displayIntervall = value;
+                foreach (var zaehler in zaehlerList)
+                {
+                    zaehler.Intervall = displayIntervall;
+                }
+                aktualisieren();
+            }
+        }
+
+        //public CalcMode DisplayMode { get; set; }
+        private CalcModeEnum calcMode;
+        public CalcModeEnum CalcMode
+        {
+            get { return calcMode; }
+            set
+            {
+                calcMode = value;
+                foreach (var zaehler in zaehlerList)
+                {
+                    zaehler.CalcMode = calcMode;
+                }
+                aktualisieren();
+            }
+        }
+
+        public bool ShowMarker { get; set; }
+
+        private bool dataOnIntervalBoundarys;
+        public bool DataOnIntervalBoundarys
+        {
+            get { return dataOnIntervalBoundarys; }
+            set
+            {
+                dataOnIntervalBoundarys = value;
+                foreach (var zaehler in zaehlerList)
+                {
+                    zaehler.DataOnIntervalBoundarys = dataOnIntervalBoundarys;
+                }
+            }
+        }
 
         public ZaehlerControl()
         {
@@ -24,8 +89,9 @@ namespace zaehlerNS
             chart1.Legends[0].BackColor = System.Drawing.Color.Transparent;
 
             cBIntervall.DataSource = Enum.GetNames(typeof(ZeitIntervall));
-            cBCalcMode.DataSource = Enum.GetNames(typeof(CalcMode));
+            cBCalcMode.DataSource = Enum.GetNames(typeof(CalcModeEnum));
             progressBar1.Visible = false;
+
 
         }
 
@@ -53,11 +119,40 @@ namespace zaehlerNS
 
         public void aktualisieren()
         {
+            // Marker setzen
+            MarkerStyle markerStyle;
+            if (ShowMarker) markerStyle = MarkerStyle.Circle;
+            else markerStyle = MarkerStyle.None;
+            foreach (var serie in chart1.Series)
+            {
+                serie.MarkerStyle = markerStyle;
+            }
+
+            cBMarker.Checked = ShowMarker;
+            cBIntervallgrenzen.Checked = DataOnIntervalBoundarys;
+            cBAnzTage.Text = DisplayAnzTage.ToString();
+            cBCalcMode.SelectedIndex = (int)CalcMode;
+            if (DataOnIntervalBoundarys)
+            {
+                if (DisplayIntervall == ZeitIntervall.all) DisplayIntervall = ZeitIntervall.Minute;
+                if (DisplayIntervall == ZeitIntervall.Sekunde) DisplayIntervall = ZeitIntervall.Minute;
+
+            }
+            cBIntervall.SelectedIndex = (int)DisplayIntervall;
+
             foreach (var zaehler in zaehlerList)
             {
+                zaehler.AnzTage = DisplayAnzTage;
+                zaehler.Intervall = DisplayIntervall;
+                zaehler.CalcMode = CalcMode;
+                zaehler.DataOnIntervalBoundarys = DataOnIntervalBoundarys;
+                // berechnen
+                zaehler.calculateData();
+                // neu binden
                 Series serie = chart1.Series[zaehler.Name];
                 serie.Points.DataBindXY(zaehler.Values.Keys, zaehler.Values.Values);
             }
+            // skalieren
             chart1.ChartAreas[0].RecalculateAxesScale();
         }
 
@@ -70,28 +165,15 @@ namespace zaehlerNS
             double wert = 1;
             if (double.TryParse(tb.Text, out wert))
             {
-                foreach (var zaehler in zaehlerList)
-                {
-                    zaehler.AnzTage = wert;
-                    zaehler.readData();
-                }
-                
-                aktualisieren();
+                DisplayAnzTage = wert;
             }
         }
 
 
         private void cBMarker_CheckedChanged(object sender, EventArgs e)
         {
-            CheckBox cb = (CheckBox)sender;
-            MarkerStyle markerStyle;
-            if (cb.Checked) markerStyle = MarkerStyle.Circle;
-            else markerStyle = MarkerStyle.None;
-
-            foreach (var serie in chart1.Series)
-            {
-                serie.MarkerStyle = markerStyle;
-            }
+            ShowMarker = cBMarker.Checked;
+            aktualisieren();
         }
 
 
@@ -105,45 +187,41 @@ namespace zaehlerNS
         {
             ZeitIntervall intervall = ZeitIntervall.none;
             intervall = (ZeitIntervall)Enum.Parse(typeof(ZeitIntervall),cBIntervall.SelectedValue.ToString());
-            if ((intervall == ZeitIntervall.all) | (intervall == ZeitIntervall.Sekunde) & (cBIntervallgrenzen.Checked)) return;    // bei intervallgrenzen keine schnellen Intervalle erlaubt
-            //if ((intervall == ZeitIntervall.all) & (cBIntervallgrenzen.Checked)) return;    // bei intervallgrenzen keine schnellen Intervalle erlaubt
+            //if ((intervall == ZeitIntervall.all) | (intervall == ZeitIntervall.Sekunde) & (cBIntervallgrenzen.Checked)) return;    // bei intervallgrenzen keine schnellen Intervalle erlaubt
 
             if (intervall != ZeitIntervall.none)
             {
-                foreach (var zaehler in zaehlerList)
-                {
-                    zaehler.Intervall = intervall;
-                    zaehler.calculateData();
-                }
-                aktualisieren();
+                DisplayIntervall = intervall;
+
             }
         }
 
         private void cBIntervallgrenzen_CheckStateChanged(object sender, EventArgs e)
         {
             CheckBox cb = (CheckBox)sender;
+            DataOnIntervalBoundarys = cb.Checked;
 
-            foreach (var zaehler in zaehlerList)
-            {
-                zaehler.dataOnIntervalBoundarys = cb.Checked;
-                if ((zaehler.Intervall == ZeitIntervall.all) | (zaehler.Intervall == ZeitIntervall.Sekunde) & (cBIntervallgrenzen.Checked))
-                {
-                    zaehler.Intervall = ZeitIntervall.Minute;
-                    cBIntervall.SelectedItem = "Minute";
-                }
+            //foreach (var zaehler in zaehlerList)
+            //{
+            //    zaehler.DataOnIntervalBoundarys = cb.Checked;
+            //    if ((zaehler.Intervall == ZeitIntervall.all) | (zaehler.Intervall == ZeitIntervall.Sekunde) & (cBIntervallgrenzen.Checked))
+            //    {
+            //        zaehler.Intervall = ZeitIntervall.Minute;
+            //        cBIntervall.SelectedItem = "Minute";
+            //    }
                 
-                zaehler.calculateData();
-            }
+            //    //zaehler.calculateData();
+            //}
             aktualisieren();
         }
 
         private void cBCalcMode_SelectedIndexChanged(object sender, EventArgs e)
         {
-            CalcMode calcMode = CalcMode.value;
+            CalcModeEnum calcMode = CalcModeEnum.value;
             bool dataOnIntervalBoundarysAllowed = true;
 
-            calcMode = (CalcMode)Enum.Parse(typeof(CalcMode), cBCalcMode.SelectedValue.ToString());
-            if ((calcMode == CalcMode.difference ) | (calcMode == CalcMode.average))    
+            calcMode = (CalcModeEnum)Enum.Parse(typeof(CalcModeEnum), cBCalcMode.SelectedValue.ToString());
+            if ((calcMode == CalcModeEnum.difference ) | (calcMode == CalcModeEnum.average))    
             {   // keine berechnung auf Intervallgrenzen
                 dataOnIntervalBoundarysAllowed = false;
             }
@@ -153,10 +231,10 @@ namespace zaehlerNS
                 zaehler.CalcMode = calcMode;
                 zaehler.Intervall = ZeitIntervall.all;
                 cBIntervall.SelectedItem = "all";
-                zaehler.dataOnIntervalBoundarys &= dataOnIntervalBoundarysAllowed;
-                cBIntervallgrenzen.Checked = zaehler.dataOnIntervalBoundarys;
+                zaehler.DataOnIntervalBoundarys &= dataOnIntervalBoundarysAllowed;
+                cBIntervallgrenzen.Checked = zaehler.DataOnIntervalBoundarys;
 
-                zaehler.calculateData();
+                //zaehler.calculateData();
             }
             aktualisieren();
         }

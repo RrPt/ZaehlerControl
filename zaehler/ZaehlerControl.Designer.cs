@@ -85,7 +85,7 @@
             this.cBAnzTage.Name = "cBAnzTage";
             this.cBAnzTage.Size = new System.Drawing.Size(42, 21);
             this.cBAnzTage.TabIndex = 5;
-            this.cBAnzTage.Text = "0,1";
+            this.cBAnzTage.Text = "0.1";
             this.cBAnzTage.TextChanged += new System.EventHandler(this.cBAnzahlTage_TextChanged);
             // 
             // label1

@@ -11,7 +11,7 @@ namespace zaehlerNS
         all, Sekunde, Minute, Stunde, Tag, Woche, Monat, Jahr, Jahrzehnt, none 
     } 
 
-    static public class Interval
+    public class Interval
     {
         static public DateTime abrunden(DateTime dt, ZeitIntervall intervall)
         {
@@ -27,7 +27,7 @@ namespace zaehlerNS
             switch (interval)
             {
                 case ZeitIntervall.all:
-                    ts = new TimeSpan(0,0,0);
+                    ts = new TimeSpan(0,0,1);
                     break;
                 case ZeitIntervall.Sekunde:
                     ts = new TimeSpan(0,0,1);

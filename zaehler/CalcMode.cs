@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace zaehlerNS
 {
-    public enum CalcMode
+    public enum CalcModeEnum
     {
         value, difference, average
     }
