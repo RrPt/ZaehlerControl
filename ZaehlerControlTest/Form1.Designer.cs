@@ -79,7 +79,7 @@
             this.zaehlerControl2.Cursor = System.Windows.Forms.Cursors.Default;
             this.zaehlerControl2.DataOnIntervalBoundarys = false;
             this.zaehlerControl2.DisplayAnzTage = 1D;
-            this.zaehlerControl2.DisplayIntervall = zaehlerNS.ZeitIntervall.all;
+            this.zaehlerControl2.DisplayIntervall = zaehlerNS.ZeitIntervall.Sekunde;
             this.zaehlerControl2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.zaehlerControl2.Location = new System.Drawing.Point(0, 0);
             this.zaehlerControl2.Name = "zaehlerControl2";

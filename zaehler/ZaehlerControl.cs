@@ -153,7 +153,6 @@ namespace zaehlerNS
             cBCalcMode.SelectedIndex = (int)CalcMode;
             if (DataOnIntervalBoundarys)
             {
-                if (DisplayIntervall == ZeitIntervall.all) DisplayIntervall = ZeitIntervall.Minute;
                 if (DisplayIntervall == ZeitIntervall.Sekunde) DisplayIntervall = ZeitIntervall.Minute;
 
             }
@@ -213,51 +212,32 @@ namespace zaehlerNS
 
         private void cBIntervall_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ZeitIntervall intervall = ZeitIntervall.none;
+            ZeitIntervall intervall = ZeitIntervall.Sekunde;
             intervall = (ZeitIntervall)Enum.Parse(typeof(ZeitIntervall),cBIntervall.SelectedValue.ToString());
-            //if ((intervall == ZeitIntervall.all) | (intervall == ZeitIntervall.Sekunde) & (cBIntervallgrenzen.Checked)) return;    // bei intervallgrenzen keine schnellen Intervalle erlaubt
-
-            if (intervall != ZeitIntervall.none)
-            {
-                DisplayIntervall = intervall;
-
-            }
+            DisplayIntervall = intervall;
         }
 
         private void cBIntervallgrenzen_CheckStateChanged(object sender, EventArgs e)
         {
             CheckBox cb = (CheckBox)sender;
             DataOnIntervalBoundarys = cb.Checked;
-
-            //foreach (var zaehler in zaehlerList)
-            //{
-            //    zaehler.DataOnIntervalBoundarys = cb.Checked;
-            //    if ((zaehler.Intervall == ZeitIntervall.all) | (zaehler.Intervall == ZeitIntervall.Sekunde) & (cBIntervallgrenzen.Checked))
-            //    {
-            //        zaehler.Intervall = ZeitIntervall.Minute;
-            //        cBIntervall.SelectedItem = "Minute";
-            //    }
-                
-            //    //zaehler.calculateData();
-            //}
             aktualisieren();
         }
 
         private void cBCalcMode_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //CalcModeEnum calcMode = CalcModeEnum.value;
             bool dataOnIntervalBoundarysAllowed = true;
 
             calcMode = (CalcModeEnum)Enum.Parse(typeof(CalcModeEnum), cBCalcMode.SelectedValue.ToString());
             if ((calcMode == CalcModeEnum.difference ) | (calcMode == CalcModeEnum.average))    
-            {   // keine berechnung auf Intervallgrenzen
+            {   // keine Berechnung auf Intervallgrenzen
                 dataOnIntervalBoundarysAllowed = false;
             }
 
             foreach (var zaehler in zaehlerList)
             {
                 zaehler.CalcMode = calcMode;
-                zaehler.Intervall = ZeitIntervall.all;
+                zaehler.Intervall = ZeitIntervall.Sekunde;
                 cBIntervall.SelectedItem = "all";
                 zaehler.DataOnIntervalBoundarys &= dataOnIntervalBoundarysAllowed;
                 cBIntervallgrenzen.Checked = zaehler.DataOnIntervalBoundarys;

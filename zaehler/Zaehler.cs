@@ -29,7 +29,7 @@ namespace zaehlerNS
 
 
 
-        private ZeitIntervall intervall = ZeitIntervall.all;
+        private ZeitIntervall intervall = ZeitIntervall.Sekunde;
         private double anzTage = 2;
         ZaehlerControl myControl = null;
         SortedList<DateTime, double> rawData = new SortedList<DateTime, double>();
@@ -367,12 +367,6 @@ namespace zaehlerNS
                 case ZeitIntervall.Sekunde:
                     if ((istTime.Date == lastTime.Date) & (istTime.Hour == lastTime.Hour) & (istTime.Minute == lastTime.Minute) & (istTime.Second == lastTime.Second)) return true;
                     break;
-                case ZeitIntervall.all:
-                    return false;
-
-                case ZeitIntervall.none:
-                    return true;
-
                 default:
                     return false;
 
