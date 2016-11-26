@@ -27,15 +27,14 @@ namespace zaehlerNS
         private double anzTage = 2;
         ZaehlerControl myControl = null;
         SortedList<DateTime, double> rawData = new SortedList<DateTime, double>();
-       
+        public event EventHandler<int> progressChangeEvent ;  
+
 
         #region Konstruktoren
 
 
         public Zaehler(string name, string datumSpaltenName, string wertSpaltenName, string tabellenName)
         {
-            //            Zaehler z = new Zaehler("Wasser","select Top 100 Datum,Volumen from H2OZaehler order by datum desc");
-            //Zaehler z = new Zaehler("Wasser", "Datum", "Volumen", "H2OZaehler");
             this.name = name;
             this.datumSpaltenName = datumSpaltenName;
             this.wertSpaltenName = wertSpaltenName;
@@ -43,8 +42,6 @@ namespace zaehlerNS
             values = new SortedList<DateTime, double>();
             RawDataValid = false;
             DataCalculated = false;
-            //readDataFromSql();
-            //calculateData();
         }
 
         internal void MyControl(ZaehlerControl zaehlerControl)
@@ -228,15 +225,13 @@ namespace zaehlerNS
                                         if (lastTime > new DateTime(2010, 1, 1))
                                         {   // nivht der erste Wert (da sonst kein Zeitintervall bekannt)
                                             double dauer = (time - lastTime).TotalSeconds;
-                                            values.Add(lastTime, (istWert - lastWert) / dauer);
+                                            values.Add(lastTime, (istWert - lastWert) * Interval.toTimespan(Intervall).TotalSeconds / dauer);
                                         }
                                     }
                                     lastWert = istWert;
                                     lastTime = time;
                                 }
                             }
-                            //lastTime = endTime;
-                            //lastWert = istWert;
                         }
                         else
                         {   // Werte ausdünnen
@@ -253,9 +248,9 @@ namespace zaehlerNS
                                 else if (CalcMode == CalcModeEnum.average)
                                 {   // Mittelwert über letztes angezeigte Intervall anzeigen
                                     if (lastTime > new DateTime(2010, 1, 1))
-                                    {   // nivht der erste Wert (da sonst kein Zeitintervall bekannt)
+                                    {   // nicht der erste Wert (da sonst kein Zeitintervall bekannt)
                                         double dauer = (istTime - lastTime).TotalSeconds;
-                                        values.Add(lastTime, (istWert - lastWert) / dauer);
+                                        values.Add(lastTime, (istWert - lastWert)*Interval.toTimespan(Intervall).TotalSeconds / dauer);
                                     }
                                 }
                                 lastWert = istWert;
@@ -265,16 +260,15 @@ namespace zaehlerNS
                         // Fortschritt anzeigen
                         anz++;
                         int fortschritt = anz * 100 / anzValues;
-                        if (myControl != null)
-                        {
-                            myControl.progressBar1.Value = fortschritt;
-                        }
-                        //Console.WriteLine(fortschritt);
+                        if (progressChangeEvent!=null) progressChangeEvent(this, fortschritt);
+                        //if (myControl != null)
+                        //{
+                        //    myControl.progressBar1.Value = fortschritt;
+                        //}
                     }
                     catch (Exception ex)
                     {
-
-                        //throw;
+                        throw;
                     }
 
                 }

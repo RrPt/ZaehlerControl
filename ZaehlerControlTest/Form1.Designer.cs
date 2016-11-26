@@ -58,15 +58,15 @@
             // zaehlerControl1
             // 
             this.zaehlerControl1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.zaehlerControl1.CalcMode = zaehlerNS.CalcModeEnum.value;
+            this.zaehlerControl1.CalcMode = zaehlerNS.CalcModeEnum.average;
             this.zaehlerControl1.Cursor = System.Windows.Forms.Cursors.Default;
-            this.zaehlerControl1.DataOnIntervalBoundarys = false;
+            this.zaehlerControl1.DataOnIntervalBoundarys = true;
             this.zaehlerControl1.DisplayAnzTage = 0.5D;
-            this.zaehlerControl1.DisplayIntervall = zaehlerNS.ZeitIntervall.all;
+            this.zaehlerControl1.DisplayIntervall = zaehlerNS.ZeitIntervall.Minute;
             this.zaehlerControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.zaehlerControl1.Location = new System.Drawing.Point(0, 0);
             this.zaehlerControl1.Name = "zaehlerControl1";
-            this.zaehlerControl1.ShowMarker = false;
+            this.zaehlerControl1.ShowMarker = true;
             this.zaehlerControl1.Size = new System.Drawing.Size(743, 448);
             this.zaehlerControl1.TabIndex = 0;
             // 

@@ -98,7 +98,7 @@ namespace zaehlerNS
         public void AddZaehler(Zaehler z)
         {
             zaehlerList.Add(z);
-            z.MyControl(this);
+            z.progressChangeEvent += setProgress;
             Series serie = chart1.Series.Add(z.Name);
             serie.Points.DataBindXY(z.Values.Keys, z.Values.Values);
             serie.ChartType = SeriesChartType.Line;
@@ -111,11 +111,21 @@ namespace zaehlerNS
                 "Mittelwert: " + "#AVG{N2}" + "\n" +
                 "Erster:     " + "#FIRST{N2}" + "\n" +
                 "Letzter:    " + "#LAST{N2}";
-            cBMarker_CheckedChanged(cBMarker, null);
+            //cBMarker_CheckedChanged(cBMarker, null);
             aktualisieren();
         }
 
-
+        private void setProgress(object sender, int e)
+        {
+            if ((e > 0) & (e < 100))
+            {
+                progressBar1.Value = e;
+                progressBar1.Visible = true;
+            }
+            else
+            {
+                progressBar1.Visible = false;            }
+        }
 
         public void aktualisieren()
         {
@@ -217,7 +227,7 @@ namespace zaehlerNS
 
         private void cBCalcMode_SelectedIndexChanged(object sender, EventArgs e)
         {
-            CalcModeEnum calcMode = CalcModeEnum.value;
+            //CalcModeEnum calcMode = CalcModeEnum.value;
             bool dataOnIntervalBoundarysAllowed = true;
 
             calcMode = (CalcModeEnum)Enum.Parse(typeof(CalcModeEnum), cBCalcMode.SelectedValue.ToString());
