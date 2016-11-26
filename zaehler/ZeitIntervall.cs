@@ -8,7 +8,7 @@ namespace zaehlerNS
 {
     public enum ZeitIntervall
     {
-        all, Sekunde, Minute, Stunde, Tag, Woche, Monat, Jahr, Jahrzehnt, none 
+        all, Sekunde, Minute, Viertelstunde,  Stunde, Tag, Woche, Monat, Jahr, Jahrzehnt, none 
     } 
 
     public class Interval
@@ -34,6 +34,9 @@ namespace zaehlerNS
                     break;
                 case ZeitIntervall.Minute:
                     ts = new TimeSpan(0, 1, 0);
+                    break;
+                case ZeitIntervall.Viertelstunde:
+                    ts = new TimeSpan(0, 15, 0);
                     break;
                 case ZeitIntervall.Stunde:
                     ts = new TimeSpan(1, 0, 0);

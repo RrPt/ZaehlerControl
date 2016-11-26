@@ -8,6 +8,8 @@ namespace zaehlerNS
     public partial class ZaehlerControl : UserControl
     {
         private List<Zaehler> zaehlerList = new List<Zaehler>();
+        private string einheit;
+        private string diffEinheit;
 
         private double displayAnzTage = 3;
 
@@ -29,6 +31,13 @@ namespace zaehlerNS
         }
 
         private ZeitIntervall displayIntervall;
+
+        public void Einheiten(string einheit, string diffEinheit)
+        {
+            this.einheit = einheit;
+            this.diffEinheit = diffEinheit;
+        }
+
         public ZeitIntervall DisplayIntervall
         {
             get { return displayIntervall; }
@@ -150,6 +159,15 @@ namespace zaehlerNS
             }
             cBIntervall.SelectedIndex = (int)DisplayIntervall;
 
+            if (CalcMode == CalcModeEnum.average)
+            {
+                //if (diffEinheit != null) chart1.ChartAreas[0].AxisY.Title = diffEinheit;
+                if (diffEinheit != null) chart1.ChartAreas[0].AxisY.Title = einheit+@"/"+DisplayIntervall.ToString();
+            }
+            else
+            {
+                if (einheit != null) chart1.ChartAreas[0].AxisY.Title = einheit;
+            }
             foreach (var zaehler in zaehlerList)
             {
                 zaehler.AnzTage = DisplayAnzTage;

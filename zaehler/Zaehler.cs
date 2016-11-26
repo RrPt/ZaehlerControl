@@ -23,6 +23,9 @@ namespace zaehlerNS
         private string datumSpaltenName;
         private string wertSpaltenName;
         private string tabellenName;
+        private double faktor;
+        private double diffFaktor;
+
 
 
 
@@ -36,12 +39,14 @@ namespace zaehlerNS
         #region Konstruktoren
 
 
-        public Zaehler(string name, string datumSpaltenName, string wertSpaltenName, string tabellenName)
+        public Zaehler(string name, string datumSpaltenName, string wertSpaltenName, string tabellenName, double faktor = 1d, double diffFaktor = 1d)
         {
             this.name = name;
             this.datumSpaltenName = datumSpaltenName;
             this.wertSpaltenName = wertSpaltenName;
             this.tabellenName = tabellenName;
+            this.faktor = faktor;
+            this.diffFaktor = diffFaktor;
             values = new SortedList<DateTime, double>();
             RawDataValid = false;
             DataCalculated = false;
@@ -144,6 +149,32 @@ namespace zaehlerNS
             }
         }
 
+        public double Faktor
+        {
+            get
+            {
+                return faktor;
+            }
+
+            set
+            {
+                faktor = value;
+            }
+        }
+
+        public double DiffFaktor
+        {
+            get
+            {
+                return diffFaktor;
+            }
+
+            set
+            {
+                diffFaktor = value;
+            }
+        }
+
 
         #endregion
 
@@ -240,18 +271,18 @@ namespace zaehlerNS
                                 {   // erster Wert in neuem Intervall
                                     if (CalcMode == CalcModeEnum.value)
                                     {   // Wert anzeigen
-                                        values.Add(time, istWert);
+                                        values.Add(time, istWert*faktor);
                                     }
                                     else if (CalcMode == CalcModeEnum.difference)
                                     {   // Differenz zu letztem angezeigten Wert anzeigen
-                                        if (lastTime > new DateTime(2010, 1, 1)) values.Add(time, istWert - lastWert);
+                                        if (lastTime > new DateTime(2010, 1, 1)) values.Add(time, (istWert - lastWert)*faktor);
                                     }
                                     else if (CalcMode == CalcModeEnum.average)
                                     {   // Mittelwert über letztes angezeigte Intervall anzeigen
                                         if (lastTime > new DateTime(2010, 1, 1))
                                         {   // nivht der erste Wert (da sonst kein Zeitintervall bekannt)
                                             double dauer = (time - lastTime).TotalSeconds;
-                                            values.Add(lastTime, (istWert - lastWert) * Interval.toTimespan(Intervall).TotalSeconds / dauer);
+                                            values.Add(lastTime, (istWert - lastWert)*diffFaktor * Interval.toTimespan(Intervall).TotalSeconds / dauer);
                                         }
                                     }
                                     lastWert = istWert;
@@ -265,18 +296,18 @@ namespace zaehlerNS
                             {   // erster Wert in neuem Intervall
                                 if (CalcMode == CalcModeEnum.value)
                                 {   // Wert anzeigen
-                                    values.Add(istTime, istWert);
+                                    values.Add(istTime, istWert*faktor);
                                 }
                                 else if (CalcMode == CalcModeEnum.difference)
                                 {   // Differenz zu letztem angezeigten Wert anzeigen
-                                    if (lastTime > new DateTime(2010, 1, 1)) values.Add(istTime, istWert - lastWert);
+                                    if (lastTime > new DateTime(2010, 1, 1)) values.Add(istTime, (istWert - lastWert)*faktor);
                                 }
                                 else if (CalcMode == CalcModeEnum.average)
                                 {   // Mittelwert über letztes angezeigte Intervall anzeigen
                                     if (lastTime > new DateTime(2010, 1, 1))
                                     {   // nicht der erste Wert (da sonst kein Zeitintervall bekannt)
                                         double dauer = (istTime - lastTime).TotalSeconds;
-                                        values.Add(lastTime, (istWert - lastWert)*Interval.toTimespan(Intervall).TotalSeconds / dauer);
+                                        values.Add(lastTime, (istWert - lastWert)*diffFaktor*Interval.toTimespan(Intervall).TotalSeconds / dauer);
                                     }
                                 }
                                 lastWert = istWert;
@@ -326,6 +357,9 @@ namespace zaehlerNS
                     break;
                 case ZeitIntervall.Stunde:
                     if ((istTime.Date == lastTime.Date) & (istTime.Hour == lastTime.Hour)) return true;
+                    break;
+                case ZeitIntervall.Viertelstunde:
+                    if ((istTime.Date == lastTime.Date) & (istTime.Hour == lastTime.Hour) & ((istTime.Minute / 15) == (lastTime.Minute / 15))) return true;
                     break;
                 case ZeitIntervall.Minute:
                     if ((istTime.Date == lastTime.Date) & (istTime.Hour == lastTime.Hour) & (istTime.Minute == lastTime.Minute)) return true;

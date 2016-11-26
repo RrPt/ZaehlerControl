@@ -21,20 +21,20 @@ namespace zaehlerNS
         {
             InitializeComponent();
 
-            z = new Zaehler("Wasser", "Datum","Volumen","H2OZaehler");
-            z.Name = "Wasserzähler";
+            zaehlerControl1.Einheiten("l", "l/s");
+            z = new Zaehler("Wasserzähler", "Datum","Volumen","H2OZaehler",1d,1d);
             zaehlerControl1.AddZaehler(z);
-            zaehlerControl1.aktualisieren();
             val = z.lastValue;
 
-
-            Zaehler z2 = new Zaehler("Bezugszähler", "Datum", "Bezogen", "Zaehlerstaende");
-            z2.Name = "Bezugszähler";
+            zaehlerControl2.Einheiten("kWh", "kW" );
+            Zaehler z2 = new Zaehler("Wärmezähler", "Datum", "EnergieCalc", "WaermeZaehler",1000d, 1000d / 3600d);
             zaehlerControl2.AddZaehler(z2);
 
-            Zaehler z3 = new Zaehler("Erzeugtzaehler", "Datum", "Erzeugt", "Zaehlerstaende");
-            z3.Name = "Erzeugtzaehler";
-            zaehlerControl2.AddZaehler(z3);
+            //Zaehler z2 = new Zaehler("Bezugszähler", "Datum", "Bezogen", "Zaehlerstaende");
+            //zaehlerControl2.AddZaehler(z2);
+
+            //Zaehler z3 = new Zaehler("Erzeugtzaehler", "Datum", "Erzeugt", "Zaehlerstaende");
+            //zaehlerControl2.AddZaehler(z3);
 
             timer1.Start();
         }
