@@ -23,6 +23,9 @@ namespace zaehlerNS
         private string datumSpaltenName;
         private string wertSpaltenName;
         private string tabellenName;
+
+
+
         private ZeitIntervall intervall = ZeitIntervall.all;
         private double anzTage = 2;
         ZaehlerControl myControl = null;
@@ -93,9 +96,12 @@ namespace zaehlerNS
 
             set
             {
-                anzTage = value;
-                RawDataValid = false;
-                DataCalculated = false;
+                if (anzTage != value)
+                {
+                    anzTage = value;
+                    RawDataValid = false;
+                    DataCalculated = false;
+                }
             }
         }
 
@@ -129,8 +135,28 @@ namespace zaehlerNS
 
         public bool DataCalculated { get; private set; }
 
+        
+        public double lastValue
+        {
+            get
+            {
+                return rawData.Values[rawData.Count-1];
+            }
+        }
+
+
         #endregion
 
+
+        public void AddPoint(DateTime time, double val)
+        {
+            if (!rawData.ContainsKey(time))
+            {
+                rawData.Add(time, val);
+                while (rawData.Keys[0]<DateTime.Now.AddDays(-AnzTage)) rawData.RemoveAt(0);
+                DataCalculated = false;
+            }
+        }
 
         private void readDataFromSql()
         {
