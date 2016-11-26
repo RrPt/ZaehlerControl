@@ -282,7 +282,10 @@ namespace zaehlerNS
                                         if (lastTime > new DateTime(2010, 1, 1))
                                         {   // nivht der erste Wert (da sonst kein Zeitintervall bekannt)
                                             double dauer = (time - lastTime).TotalSeconds;
-                                            values.Add(lastTime, (istWert - lastWert)*diffFaktor * Interval.toTimespan(Intervall).TotalSeconds / dauer);
+                                            if (diffFaktor==1d)
+                                                values.Add(lastTime, (istWert - lastWert)* Interval.toTimespan(Intervall).TotalSeconds / dauer);
+                                            else
+                                                values.Add(lastTime, (istWert - lastWert) * diffFaktor / dauer);
                                         }
                                     }
                                     lastWert = istWert;
@@ -307,7 +310,10 @@ namespace zaehlerNS
                                     if (lastTime > new DateTime(2010, 1, 1))
                                     {   // nicht der erste Wert (da sonst kein Zeitintervall bekannt)
                                         double dauer = (istTime - lastTime).TotalSeconds;
-                                        values.Add(lastTime, (istWert - lastWert)*diffFaktor*Interval.toTimespan(Intervall).TotalSeconds / dauer);
+                                        if (diffFaktor == 1d)
+                                            values.Add(lastTime, (istWert - lastWert) * Interval.toTimespan(Intervall).TotalSeconds / dauer);
+                                        else
+                                            values.Add(lastTime, (istWert - lastWert) * diffFaktor / dauer);
                                     }
                                 }
                                 lastWert = istWert;

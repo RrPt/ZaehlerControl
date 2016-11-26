@@ -160,8 +160,11 @@ namespace zaehlerNS
 
             if (CalcMode == CalcModeEnum.average)
             {
-                //if (diffEinheit != null) chart1.ChartAreas[0].AxisY.Title = diffEinheit;
-                if (diffEinheit != null) chart1.ChartAreas[0].AxisY.Title = einheit+@"/"+DisplayIntervall.ToString();
+                if (diffEinheit != null)
+                {
+                    if (diffEinheit=="")   chart1.ChartAreas[0].AxisY.Title = einheit + @"/" + DisplayIntervall.ToString();
+                    else chart1.ChartAreas[0].AxisY.Title = diffEinheit;
+                }
             }
             else
             {
