@@ -15,7 +15,7 @@ using System.Globalization;
 namespace zaehlerNS
 {
     [Serializable()]
-    public class Zaehler
+    public class ZaehlerData
     {
         private String connectionString = "Data Source=KnxPC;Initial Catalog=EIB;Integrated Security=SSPI";
         private string name;
@@ -39,7 +39,7 @@ namespace zaehlerNS
         #region Konstruktoren
 
 
-        public Zaehler(string name, string datumSpaltenName, string wertSpaltenName, string tabellenName, double faktor = 1d, double diffFaktor = 1d)
+        public ZaehlerData(string name, string datumSpaltenName, string wertSpaltenName, string tabellenName, double faktor = 1d, double diffFaktor = 1d)
         {
             this.name = name;
             this.datumSpaltenName = datumSpaltenName;

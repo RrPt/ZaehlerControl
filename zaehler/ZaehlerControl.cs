@@ -7,7 +7,7 @@ namespace zaehlerNS
 {
     public partial class ZaehlerControl : UserControl
     {
-        private List<Zaehler> zaehlerList = new List<Zaehler>();
+        private List<ZaehlerData> zaehlerList = new List<ZaehlerData>();
         private string einheit;
         private string diffEinheit;
 
@@ -87,7 +87,7 @@ namespace zaehlerNS
         public ZaehlerControl()
         {
             InitializeComponent();
-            zaehlerList = new List<Zaehler>();
+            zaehlerList = new List<ZaehlerData>();
             chart1.ChartAreas[0].CursorX.Interval = 0.00001;
             chart1.ChartAreas[0].CursorY.Interval = 0.001;
             chart1.ChartAreas[0].CursorX.IsUserSelectionEnabled = true;
@@ -104,7 +104,7 @@ namespace zaehlerNS
 
         }
 
-        public void AddZaehler(Zaehler z)
+        public void AddZaehler(ZaehlerData z)
         {
             zaehlerList.Add(z);
             z.progressChangeEvent += setProgress;
@@ -263,6 +263,15 @@ namespace zaehlerNS
             anzStartPaint--;
             Console.WriteLine("PostPaint "+ anzStartPaint);
             if (anzStartPaint==0) Cursor = Cursors.Default;
+        }
+
+        public ZaehlerData getZaehler(string name)
+        {
+            foreach (var z in zaehlerList)
+            {
+                if (z.Name == name) return z;
+            }
+            throw new Exception("Zähler " + name + " nicht vorhanden");
         }
     }
 }

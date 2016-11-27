@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>zaehler</RootNamespace>
     <AssemblyName>zaehler</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -51,7 +52,7 @@
     </Compile>
     <Compile Include="CalcMode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Zaehler.cs" />
+    <Compile Include="ZaehlerData.cs" />
     <Compile Include="ZaehlerControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
