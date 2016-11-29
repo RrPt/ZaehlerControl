@@ -253,16 +253,12 @@ namespace zaehlerNS
         int anzStartPaint = 0;
         private void chart1_PrePaint(object sender, ChartPaintEventArgs e)
         {
-            Cursor = Cursors.WaitCursor;
-            anzStartPaint++;
-            Console.WriteLine("PrePaint "+ anzStartPaint);
+
         }
 
         private void chart1_PostPaint(object sender, ChartPaintEventArgs e)
         {
-            anzStartPaint--;
-            Console.WriteLine("PostPaint "+ anzStartPaint);
-            if (anzStartPaint==0) Cursor = Cursors.Default;
+
         }
 
         public ZaehlerData getZaehler(string name)

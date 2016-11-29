@@ -59,8 +59,6 @@
             this.chart1.Size = new System.Drawing.Size(808, 403);
             this.chart1.TabIndex = 3;
             this.chart1.Text = "chart1";
-            this.chart1.PostPaint += new System.EventHandler<System.Windows.Forms.DataVisualization.Charting.ChartPaintEventArgs>(this.chart1_PostPaint);
-            this.chart1.PrePaint += new System.EventHandler<System.Windows.Forms.DataVisualization.Charting.ChartPaintEventArgs>(this.chart1_PrePaint);
             // 
             // cBIntervall
             // 

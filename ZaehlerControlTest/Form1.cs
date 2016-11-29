@@ -13,7 +13,7 @@ namespace zaehlerNS
 {
     public partial class Form1 : Form
     {
-        Zaehler z;
+        ZaehlerData z;
         double val = 6000;
         Random rnd = new Random();
 
@@ -22,7 +22,7 @@ namespace zaehlerNS
             InitializeComponent();
 
             zaehlerControl1.Einheiten("l", "");
-            z = new Zaehler("Wasserzähler", "Datum","Volumen","H2OZaehler",1d,1d);
+            z = new ZaehlerData("Wasserzähler", "Datum","Volumen","H2OZaehler",1d,1d);
             zaehlerControl1.AddZaehler(z);
             val = z.lastValue;
 
@@ -30,7 +30,7 @@ namespace zaehlerNS
             //Zaehler z2 = new Zaehler("Wärmezähler", "Datum", "EnergieCalc", "WaermeZaehler",1000d, 1000d / 3600d);
             //zaehlerControl2.AddZaehler(z2);
 
-            Zaehler z2 = new Zaehler("Verbrauch", "Datum", "Verbraucht", "V_VirtZaehlerstaende",1d,3600d);
+            ZaehlerData z2 = new ZaehlerData("Verbrauch", "Datum", "Verbraucht", "V_VirtZaehlerstaende",1d,3600d);
             zaehlerControl2.AddZaehler(z2);
 
             //Zaehler z3 = new Zaehler("Erzeugtzaehler", "Datum", "Erzeugt", "Zaehlerstaende");
