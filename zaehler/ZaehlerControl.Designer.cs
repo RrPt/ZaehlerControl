@@ -40,6 +40,7 @@
             this.cBIntervallgrenzen = new System.Windows.Forms.CheckBox();
             this.cBCalcMode = new System.Windows.Forms.ComboBox();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.cBLine = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -131,7 +132,7 @@
             // cBIntervallgrenzen
             // 
             this.cBIntervallgrenzen.AutoSize = true;
-            this.cBIntervallgrenzen.Location = new System.Drawing.Point(441, 18);
+            this.cBIntervallgrenzen.Location = new System.Drawing.Point(533, 18);
             this.cBIntervallgrenzen.Name = "cBIntervallgrenzen";
             this.cBIntervallgrenzen.Size = new System.Drawing.Size(101, 17);
             this.cBIntervallgrenzen.TabIndex = 14;
@@ -159,11 +160,25 @@
             this.progressBar1.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.progressBar1.TabIndex = 16;
             // 
+            // cBLine
+            // 
+            this.cBLine.AutoSize = true;
+            this.cBLine.Checked = true;
+            this.cBLine.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cBLine.Location = new System.Drawing.Point(453, 18);
+            this.cBLine.Name = "cBLine";
+            this.cBLine.Size = new System.Drawing.Size(46, 17);
+            this.cBLine.TabIndex = 17;
+            this.cBLine.Text = "Line";
+            this.cBLine.UseVisualStyleBackColor = true;
+            this.cBLine.CheckedChanged += new System.EventHandler(this.cBLine_CheckedChanged);
+            // 
             // ZaehlerControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.Controls.Add(this.cBLine);
             this.Controls.Add(this.cBCalcMode);
             this.Controls.Add(this.cBIntervallgrenzen);
             this.Controls.Add(this.button1);
@@ -193,5 +208,6 @@
         private System.Windows.Forms.CheckBox cBIntervallgrenzen;
         private System.Windows.Forms.ComboBox cBCalcMode;
         public System.Windows.Forms.ProgressBar progressBar1;
+        private System.Windows.Forms.CheckBox cBLine;
     }
 }

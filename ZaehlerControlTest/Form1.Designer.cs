@@ -30,9 +30,9 @@
         {
             this.components = new System.ComponentModel.Container();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.zaehlerControl1 = new zaehlerNS.ZaehlerControl();
             this.zaehlerControl2 = new zaehlerNS.ZaehlerControl();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -57,6 +57,11 @@
             this.splitContainer1.SplitterDistance = 298;
             this.splitContainer1.TabIndex = 2;
             // 
+            // timer1
+            // 
+            this.timer1.Interval = 10000;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
             // zaehlerControl1
             // 
             this.zaehlerControl1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
@@ -68,6 +73,7 @@
             this.zaehlerControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.zaehlerControl1.Location = new System.Drawing.Point(0, 0);
             this.zaehlerControl1.Name = "zaehlerControl1";
+            this.zaehlerControl1.ShowLine = true;
             this.zaehlerControl1.ShowMarker = true;
             this.zaehlerControl1.Size = new System.Drawing.Size(743, 298);
             this.zaehlerControl1.TabIndex = 0;
@@ -83,14 +89,10 @@
             this.zaehlerControl2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.zaehlerControl2.Location = new System.Drawing.Point(0, 0);
             this.zaehlerControl2.Name = "zaehlerControl2";
+            this.zaehlerControl2.ShowLine = true;
             this.zaehlerControl2.ShowMarker = true;
             this.zaehlerControl2.Size = new System.Drawing.Size(743, 310);
             this.zaehlerControl2.TabIndex = 1;
-            // 
-            // timer1
-            // 
-            this.timer1.Interval = 10000;
-            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // Form1
             // 

@@ -25,7 +25,7 @@ namespace zaehlerNS
         private string tabellenName;
         private double faktor;
         private double diffFaktor;
-
+        private long idx = 0;
 
 
 
@@ -292,12 +292,52 @@ namespace zaehlerNS
                             else if (CalcMode == CalcModeEnum.average)
                             {   // Mittelwert über letztes angezeigte Intervall anzeigen
                                 if (lastTime > new DateTime(2010, 1, 1))
-                                {   // nivht der erste Wert (da sonst kein Zeitintervall bekannt)
+                                {   // nicht der erste Wert (da sonst kein Zeitintervall bekannt)
                                     double dauer = (time - lastTime).TotalSeconds;
                                     if (diffFaktor == 1d)
                                         values.Add(lastTime, (istWert - lastWert) * Interval.toTimespan(Intervall).TotalSeconds / dauer);
                                     else
                                         values.Add(lastTime, (istWert - lastWert) * diffFaktor / dauer);
+                                }
+                            }
+                            else if (CalcMode == CalcModeEnum.daytime)
+                            {   // Werte nach Tageszeit anzeigen
+                                if (lastTime > new DateTime(2010, 1, 1))
+                                {   // nicht der erste Wert (da sonst kein Zeitintervall bekannt)
+                                    double dauer = (time - lastTime).TotalSeconds;
+                                    if (diffFaktor == 1d)
+                                        values.Add(toDayTime(lastTime), (istWert - lastWert) * Interval.toTimespan(Intervall).TotalSeconds / dauer);
+                                    else
+                                        values.Add(toDayTime(lastTime), (istWert - lastWert) * diffFaktor / dauer);
+                                    idx++;
+                                }
+                            }
+                            else if (CalcMode == CalcModeEnum.daysum)
+                            {   // Summe nach Tageszeit anzeigen
+                                if (lastTime > new DateTime(2010, 1, 1))
+                                {   // nicht der erste Wert (da sonst kein Zeitintervall bekannt)
+                                    double dauer = (time - lastTime).TotalSeconds;
+                                    idx = 0;
+                                    if (diffFaktor == 1d)
+                                    {
+                                        if (!values.ContainsKey(toDayTime(lastTime)))
+                                        {   // neu anlegen
+                                            values.Add(toDayTime(lastTime), (istWert - lastWert) * Interval.toTimespan(Intervall).TotalSeconds / dauer);
+                                        }
+                                        else
+                                        {   // summieren
+                                            values[toDayTime(lastTime)] += (istWert - lastWert) * Interval.toTimespan(Intervall).TotalSeconds / dauer;
+                                        }
+                                    }
+                                    else
+                                        if (!values.ContainsKey(toDayTime(lastTime)))
+                                    {   // neu anlegen
+                                        values.Add(toDayTime(lastTime), (istWert - lastWert) * diffFaktor / dauer);
+                                    }
+                                    else
+                                    {   // summieren
+                                        values[toDayTime(lastTime)] += (istWert - lastWert) * diffFaktor / dauer;
+                                    }
                                 }
                             }
                             lastWert = istWert;
@@ -328,6 +368,18 @@ namespace zaehlerNS
                                     values.Add(lastTime, (istWert - lastWert) * diffFaktor / dauer);
                             }
                         }
+                        else if (CalcMode == CalcModeEnum.daytime)
+                        {   // Werte nach Tageszeit anzeigen
+                            if (lastTime > new DateTime(2010, 1, 1))
+                            {   // nicht der erste Wert (da sonst kein Zeitintervall bekannt)
+                                double dauer = (istTime - lastTime).TotalSeconds;
+                                if (diffFaktor == 1d)
+                                    values.Add(toDayTime(lastTime), (istWert - lastWert) * Interval.toTimespan(Intervall).TotalSeconds / dauer);
+                                else
+                                    values.Add(toDayTime(lastTime), (istWert - lastWert) * diffFaktor / dauer);
+                            }
+                            idx++;
+                        }
                         lastWert = istWert;
                         lastTime = istTime;
                     }
@@ -336,16 +388,19 @@ namespace zaehlerNS
                 anz++;
                 int fortschritt = anz * 100 / anzValues;
                 if (progressChangeEvent != null) progressChangeEvent(this, fortschritt);
-                //if (myControl != null)
-                //{
-                //    myControl.progressBar1.Value = fortschritt;
-                //}
+
             }
             catch (Exception ex)
             {
                 throw;
             }
 
+        }
+
+        private DateTime toDayTime(DateTime lastTime)
+        {
+            DateTime erg = DateTime.Now.Date + lastTime.TimeOfDay;
+            return erg.AddTicks(idx);
         }
 
         private bool sameIntervall(DateTime istTime, DateTime lastTime, ZeitIntervall intervall)

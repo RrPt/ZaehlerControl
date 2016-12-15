@@ -8,6 +8,6 @@ namespace zaehlerNS
 {
     public enum CalcModeEnum
     {
-        value, difference, average
+        value, difference, average, daytime, daysum
     }
 }

@@ -70,6 +70,9 @@ namespace zaehlerNS
 
         public bool ShowMarker { get; set; }
 
+        public bool ShowLine { get; set; }
+
+
         private bool dataOnIntervalBoundarys;
         public bool DataOnIntervalBoundarys
         {
@@ -142,9 +145,16 @@ namespace zaehlerNS
             MarkerStyle markerStyle;
             if (ShowMarker) markerStyle = MarkerStyle.Circle;
             else markerStyle = MarkerStyle.None;
+
+            // Line setzen
+            SeriesChartType chartType;
+            if (ShowLine) chartType = SeriesChartType.Line;
+            else chartType = SeriesChartType.Point;
+
             foreach (var serie in chart1.Series)
             {
                 serie.MarkerStyle = markerStyle;
+                    serie.ChartType = chartType;
             }
 
             cBMarker.Checked = ShowMarker;
@@ -211,6 +221,11 @@ namespace zaehlerNS
             aktualisieren();
         }
 
+        private void cBLine_CheckedChanged(object sender, EventArgs e)
+        {
+            ShowLine = cBLine.Checked;
+            aktualisieren();
+        }
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -274,5 +289,7 @@ namespace zaehlerNS
             }
             throw new Exception("Zähler " + name + " nicht vorhanden");
         }
+
+
     }
 }
