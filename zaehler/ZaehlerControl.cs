@@ -184,6 +184,11 @@ namespace zaehlerNS
             }
             // skalieren
             chart1.ChartAreas[0].RecalculateAxesScale();
+            chart1.ChartAreas[0].AxisX.ScaleView.ZoomReset(0);
+            chart1.ChartAreas[0].AxisY.ScaleView.ZoomReset(0);
+
+            chart1.ChartAreas[0].CursorX.SelectionStart = double.NaN;
+            chart1.ChartAreas[0].CursorY.SelectionEnd = double.NaN;
         }
 
 
