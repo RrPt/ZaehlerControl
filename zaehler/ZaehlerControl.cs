@@ -160,7 +160,7 @@ namespace zaehlerNS
             cBMarker.Checked = ShowMarker;
             cBIntervallgrenzen.Checked = DataOnIntervalBoundarys;
             cBAnzTage.Text = DisplayAnzTage.ToString();
-            cBCalcMode.SelectedIndex = (int)CalcMode;
+            if (cBCalcMode.Items.Count>0) cBCalcMode.SelectedIndex = (int)CalcMode;
             if (DataOnIntervalBoundarys)
             {
                 if (DisplayIntervall == ZeitIntervall.Sekunde) DisplayIntervall = ZeitIntervall.Minute;
